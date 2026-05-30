@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            background-image: url("{% static '/images/aircondition.webp' %}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        body::after {
+            content: "";
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: block;
+            background: #ffffffdd;
+            z-index: -1;
+        }
+
+        .get-out{
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .get-out button{
+            border: 1px solid #1f799a;
+            border-radius: .5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: .2rem .5rem;
+            color: #1f799a;
+            cursor: pointer;
+        }
+
+        .title{
+            font-size: 3rem;
+            margin: 1rem;
+        }
+
+        .title .title1{
+            color: gray;
+        }
+
+        .title .title2{
+            color: #1f799a;
+        }
+
+        .device {
+            width: 60%;
+            padding: 0;
+            margin: .5rem 0;
+            overflow: hidden;
+            border: .1px solid #1f799a;
+            background-color: white;
+        }
+
+        .device .info {
+            width: 100%;
+            padding: .5rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            border-bottom: 5px solid #1f799a;
+            font-family: Arial, sans-serif;
+        }
+
+        .device .info strong{
+            margin-right: 1rem;
+        }
+
+        .device .info .status-active{
+            color: green;
+        }
+
+        .device .info .status-inactive{
+            color: gray;
+        }
+
+        .device .dashboard {
+            display: flex;
+            flex-direction: row;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .device .dashboard .data {
+            margin: 1% 0;
+            padding: 1% 2%;
+            display: flex;
+            flex-direction: row;
+            border-right: 1px solid gray;
+        }
+
+        .device .dashboard .data .label {
+            padding-top: .4rem;
+            margin-right: .4rem;
+        }
+
+        .device .dashboard .data .value {
+            font-size: 3rem;
+            color: #1f799a;
+        }
+
+        .device .dashboard .data .unit {
+            padding-top: 2rem;
+        }
+        .device .dashboard .detail{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .device .dashboard .detail .condition{
+            font-size: 1.5rem;
+            margin: .2rem;
+        }
+
+        .device .dashboard .detail .condition-safe{
+            color: green;
+        }
+
+        .device .dashboard .detail .condition-warning{
+            color: orange;
+        }
+
+        .device .dashboard .detail .condition-fault{
+            color: red;
+        }
+
+        .device .dashboard .detail form{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .device .dashboard .detail form button{
+            width: 80%;
+            height: 1.5rem;
+            cursor: pointer;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            background-color: #1f799a;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="get-out" method="get" action="{% url 'security' %}">
+        <button type="submit">GETOUT</button>
+    </form>
+
+    <div class="title">
+        <strong class="title1">DEVICES</strong>
+        <strong class="title2">DASHBOARDS</strong>
+    </div>
+
+    {% for device in devices %}
+    <div class="device">
+        <div class="info">
+            <div>
+                <small>Device ID:</small>
+                <strong>{{device.device_id}}</strong>
+            </div>
+            <div>
+                <small>Status:</small>
+                <strong class="status-{{device.status}}">{{device.status|upper}}</strong>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="data">
+                <small class="label">Vibration:</small>
+                <big class="value">{{device.vibration}}</big>
+                <strong class="unit">%</strong>
+            </div>
+            <div class="data">
+                <small class="label">Noise:</small>
+                <big class="value">{{device.noise}}</big>
+                <strong class="unit">db</strong>
+            </div>
+            <div class="detail">
+                <big class="condition condition-{{device.condition}}">{{device.condition|upper}}</big>
+                <form method="post" action="{% url 'faults' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="device_id" value="{{device.device_id}}">
+                    <button type="submit">Fault History</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

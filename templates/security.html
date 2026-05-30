@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security</title>
+    
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: url("{% static '/images/aircondition_blow.jpg' %}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        body::after {
+            content: "";
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            display: block;
+            background: #ffffffdd;
+        }
+
+        .title{
+            font-size: 3rem;
+        }
+
+        .title .air{
+            color: gray;
+        }
+
+        .title .conditioner{
+            color: #1f799a;
+        }
+
+        .security-form {
+            height: 30%;
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            border: solid #1f799a 2px;
+            border-radius: 20px;
+            margin-top: 1%;
+        }
+        .security-form .info{
+            font-size: 1.1rem;
+            margin: 1%;
+            color: gray;
+        }
+ 
+        .security-form input{
+            margin: .8%;
+            width: 50%;
+            padding: 1.2% 0;
+            font-size: 1.1rem;
+            font-weight: bolder;
+            text-align: center;
+            border: none;
+        }
+
+        .security-form input:focus{
+            outline: none;
+        }
+
+        .security-form .code{
+            
+            border-bottom: solid gray 1px;
+        }
+
+        .security-form .code-btn{
+            background-color: #1f799a;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .message-error{
+            color: #ff0000;
+        }
+
+        .copyright {
+            position: absolute;
+            bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .copyright .school{
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <strong class="air">AIR</strong>
+        <strong class="conditioner">CONDITIONER</strong>
+    </div>
+    <form class="security-form" method="post" action="{% url 'security' %}">
+        {% csrf_token %}
+        <div class="info">Enter security codes to proceed</div>
+        <input class="code" name="security_code" type="password">
+        <input class="code-btn" type="submit" value="PROCEED" >
+        {% for message in messages %}
+            <small class="message-{{message.tags}}">{{message}}</small>
+        {% endfor %}
+    </form>
+
+    <div class="copyright">
+        <small class="school">&copy; Mbeya University of Science and Technology (MUST)</small>
+        <small>FYP-2025/26 | Nyabu Grace</small>
+    </div>
+</body>
+</html>
