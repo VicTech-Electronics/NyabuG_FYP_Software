@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/mnt/shared/Projects/final projects/Software/Nyabu Project/venv/bin/python3" "$0" "$@"
+'''exec' "/home/victonix/Projects/Software/Nyabu Project/venv/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

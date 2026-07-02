@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV '/mnt/shared/Projects/final projects/Software/Nyabu Project/venv'
+set -gx VIRTUAL_ENV '/home/victonix/Projects/Software/Nyabu Project/venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
