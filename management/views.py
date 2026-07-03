@@ -1,19 +1,7 @@
+from nyabu_kiyoyozi.data import SECURITY_CODE, FAULT, WARNING
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Device, Fault
-import json
-
-
-# System Data values
-SECURITY_CODE = 1234
-WARNING = {
-    "vibration": 10,
-    "noise": 10
-}
-FAULT = {
-    "vibration": 50,
-    "noise": 50
-}
 
 
 # Create your views here.
@@ -55,7 +43,7 @@ def showFaults(request):
 
         fault_device = Device.objects.get(device_id=device_id)
         if not Fault.objects.filter(device=fault_device.pk).exists():
-            message.info(request, 'The Device selected has no Fault History!')
+            messages.info(request, 'The Device selected has no Fault History!')
             return redirect('dashboard')
 
         faults = list(Fault.objects.filter(device=fault_device.pk))
@@ -63,7 +51,20 @@ def showFaults(request):
             fault.fault_type = fault.fault_type.replace('_', ' ').title()
             fault.time = fault.created_at.strftime("%d %b %Y | %H:%M")
         return render(request, 'fault_history.html', {'device_id': device_id, 'faults': faults})
-
-    messages.error(request, 'Sorry! Request method not allowed')
     return redirect('dashboard')
 
+
+def deleteFault(request):
+    if request.method == 'POST':
+        fault_id = request.POST.get('fault_id')
+        fault = Fault.objects.get(pk = fault_id)
+        fault.delete();
+        messages.success(request, 'Fault history deleted successfully')
+    else: messages.error(request, 'Sorry! Request method not allowed')
+
+    # Render remaining faults back
+    faults = list(Fault.objects.filter(device=fault.device.pk))
+    for fault in faults:
+        fault.fault_type = fault.fault_type.replace('_', ' ').title()
+        fault.time = fault.created_at.strftime("%d %b %Y | %H:%M")
+    return render(request, 'fault_history.html', {'device_id': fault.device.device_id, 'faults': faults})

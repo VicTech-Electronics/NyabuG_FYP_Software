@@ -32,13 +32,13 @@
             z-index: -1;
         }
 
-        .get-out{
+        .get-out {
             position: absolute;
             top: 2rem;
             right: 2rem;
         }
 
-        .get-out button{
+        .get-out button {
             border: 1px solid #1f799a;
             border-radius: .5rem;
             font-size: 1.2rem;
@@ -48,16 +48,16 @@
             cursor: pointer;
         }
 
-        .title{
+        .title {
             font-size: 3rem;
             margin: 1rem;
         }
 
-        .title .title1{
+        .title .title1 {
             color: gray;
         }
 
-        .title .title2{
+        .title .title2 {
             color: #1f799a;
         }
 
@@ -80,15 +80,15 @@
             font-family: Arial, sans-serif;
         }
 
-        .device .info strong{
+        .device .info strong {
             margin-right: 1rem;
         }
 
-        .device .info .status-active{
+        .device .info .status-active {
             color: green;
         }
 
-        .device .info .status-inactive{
+        .device .info .status-inactive {
             color: gray;
         }
 
@@ -119,7 +119,8 @@
         .device .dashboard .data .unit {
             padding-top: 2rem;
         }
-        .device .dashboard .detail{
+
+        .device .dashboard .detail {
             width: 50%;
             display: flex;
             flex-direction: column;
@@ -128,31 +129,31 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
-        .device .dashboard .detail .condition{
+        .device .dashboard .detail .condition {
             font-size: 1.5rem;
             margin: .2rem;
         }
 
-        .device .dashboard .detail .condition-safe{
+        .device .dashboard .detail .condition-safe {
             color: green;
         }
 
-        .device .dashboard .detail .condition-warning{
+        .device .dashboard .detail .condition-warning {
             color: orange;
         }
 
-        .device .dashboard .detail .condition-fault{
+        .device .dashboard .detail .condition-fault {
             color: red;
         }
 
-        .device .dashboard .detail form{
+        .device .dashboard .detail form {
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .device .dashboard .detail form button{
+        .device .dashboard .detail form button {
             width: 80%;
             height: 1.5rem;
             cursor: pointer;
@@ -160,6 +161,19 @@
             border: none;
             border-radius: 0;
             background-color: #1f799a;
+        }
+
+        .message {
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .message-error {
+            color: red;
+        }
+
+        .message-info {
+            color: blue;
         }
     </style>
 </head>
@@ -200,7 +214,7 @@
             </div>
             <div class="detail">
                 <big class="condition condition-{{device.condition}}">{{device.condition|upper}}</big>
-                <form method="post" action="{% url 'faults' %}">
+                <form method="post" action="{% url 'fault_history' %}">
                     {% csrf_token %}
                     <input type="hidden" name="device_id" value="{{device.device_id}}">
                     <button type="submit">Fault History</button>
@@ -209,5 +223,11 @@
         </div>
     </div>
     {% endfor %}
+
+    <!-- Display messages availables -->
+    {% for message in messages %}
+    <small class="message message-{{message.tags}}">{{message}}</small>
+    {% endfor %}
 </body>
+
 </html>
