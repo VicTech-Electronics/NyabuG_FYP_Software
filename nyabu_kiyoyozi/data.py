@@ -1,8 +1,8 @@
 # System Data values
 SECURITY_CODE = 1234
 WARNING = {
-    "vibration": 10,
-    "noise": 10
+    "vibration": 30,
+    "noise": 30
 }
 FAULT = {
     "vibration": 50,

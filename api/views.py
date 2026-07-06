@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .serializer import DeviceSerializer
-from nyabu_kiyoyozi.data import FAULT
+from nyabu_kiyoyozi.data import FAULT, WARNING
 from management.models import Device, Fault
 
 
@@ -76,7 +76,13 @@ def deviceData(request):
   device.save();
   serializer.save();
 
-  return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+  #   Prepeare response
+  server_response = "SAFE";
+  if(fault_type): server_response = "FAULT"
+  elif(device_data["vibration"] >= WARNING["vibration"] or device_data["noise"] >= WARNING["noise"]):
+   server_response = "WARNING"
+
+  return Response(server_response, status=status.HTTP_202_ACCEPTED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
